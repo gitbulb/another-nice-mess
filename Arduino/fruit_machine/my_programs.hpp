@@ -11,16 +11,8 @@
 /**
  * Runs a minimal program that alternates between showing the time and temperature.
  */
-void minimalRun(){
+void showTimeTemp(){
   static bool oneOrOther = false;
-
-  uint8_t brightness = beatsin8(20, 100, 200, 0, 0);
-
-  ledsSetStar  = CHSV( 0, 0, brightness);
-  ledsSetBonus = CHSV( 0, 0, brightness+50);
-  ledsSetArrow = CHSV( 0, 0, brightness+20);
-
-
   EVERY_N_MILLISECONDS(2000){
     oneOrOther = seconds16()%8 <6 ? true : false;
   }
@@ -30,6 +22,17 @@ void minimalRun(){
   } else {
     showTemp();
   }
+
+}
+void minimalRun(){
+
+  uint8_t brightness = beatsin8(20, 100, 200, 0, 0);
+
+  ledsSetStar  = CHSV( 0, 0, brightness);
+  ledsSetBonus = CHSV( 0, 0, brightness+50);
+  ledsSetArrow = CHSV( 0, 0, brightness+20);
+
+  showTimeTemp();
 
 }
 
@@ -55,7 +58,7 @@ void showEachLed(uint8_t bpm=4){
   if( currentLed < NUM_LEDS) {
     ledsSet[currentLed] = CRGB::White;
     display.showNumberDec(currentLed, true);
-    Serial.println("Current led: " + String(currentLed));
+    // Serial.println("Current led: " + String(currentLed));
 
     ledsSet.fadeToBlackBy(FADE_FAST);
   }

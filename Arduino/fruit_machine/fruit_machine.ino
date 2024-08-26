@@ -30,13 +30,31 @@ void printImageCompileInfo(){
   Serial.flush();
 }
 
+
+bool nightTime(){
+  uint8_t night_start = 1;
+  uint8_t night_end   = 7;
+  
+  struct tm currentTime = readTime(); // read the current time
+  // Serial.println(currentTime.tm_hour);
+
+  int currentYear = currentTime.tm_year+1900;
+  
+  // If no timesync, no night time functionality
+  if (currentYear < 2020) return false;
+  // Night time is between 01:00 and 07:00
+  if ( currentTime.tm_hour >= night_start && currentTime.tm_hour < night_end ) return true;
+
+  return false;
+}
+
 void setup() {
     // Initialize display and display "Wof" for WiFi not connected (yet).
   display.setBrightness(7);
 
   Serial.begin(115200);
 
-  delay(3000);
+  // delay(3000);
 
   printImageCompileInfo();
 
@@ -68,6 +86,8 @@ void loop() {
 
   int buttonState = digitalRead(BUTTONPIN);
 
+
+
   if (buttonState == HIGH) {
     FastLED.clear();
 
@@ -81,7 +101,11 @@ void loop() {
 
     // Delay to catch "release" of button as single button press
     delay(1000);
-  } else {
+  } else if (nightTime()) {
+    FastLED.clear();
+    FastLED.show();
+    showTimeTemp();
+  }else {
 
     // Run designated program
     switch (program) {

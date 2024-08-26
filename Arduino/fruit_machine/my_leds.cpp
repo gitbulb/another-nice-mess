@@ -12,7 +12,7 @@ constexpr uint8_t starBeams[STAR_BEAMS][STAR_WAVES] {
 #define ARROW_RIGHT 1
 
 void runStarWave( int bpm, star_motion motion, uint8_t fade ){
-  uint8_t pixel;
+  int pixel;
 
   switch(motion){
     case ssinus:
@@ -29,8 +29,11 @@ void runStarWave( int bpm, star_motion motion, uint8_t fade ){
   if( pixel > STAR_WAVES-1 ) pixel = STAR_WAVES-1;
   if( pixel < 0 ) pixel = 0;
 
+  // Serial.println("Current pixel: " + String(pixel) + String(pixel2) );
+  // Serial.println(String(pixel) + " " + String(pixel2) );
   for( int i=0; i<STAR_BEAMS; i++){
     leds[starBeams[i][pixel]] = CRGB::White;
+
   }
   ledsSetStar.fadeToBlackBy(fade);
 }
